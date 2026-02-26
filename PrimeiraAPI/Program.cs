@@ -1,13 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+using PrimeiraAPI.Data;
 using Scalar.AspNetCore;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add os serviços básicos para a aplicação, como controladores e OpenAPI
-
 builder.Services.AddControllers();
+
 // Add OpenAPI (Necessário para gerar a documentação da API)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+
+/*  
+ * Add Entity Framework Core e configurar o contexto do banco de dados para usar SQL Server.
+ * A string de conexão é obtida do arquivo appsettings.json.
+ */
+// Entity Framework + LocalDB
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
 // builder.Build() => É onde a aplicação é construída.
 var app = builder.Build();
@@ -15,7 +29,7 @@ var app = builder.Build();
 // Pipeline de processamento de requisições HTTP/HTTPS
 if (app.Environment.IsDevelopment())
 {
-    // Endpoint OpenAPI.
+    // Endpoint OpenAPI
     app.MapOpenApi();
 
     // Interface do Scalar para testar a API
@@ -26,7 +40,7 @@ if (app.Environment.IsDevelopment())
         options.ShowSidebar = true;
     });
 
-    // Redireciona a página raiz "/" para "scalar"
+    // Redireciona a pagina raiz "/" para "/scalar"
     app.MapGet("/", () => Results.Redirect("/scalar"));
 
 }
@@ -34,7 +48,7 @@ if (app.Environment.IsDevelopment())
 // Redireciona todas as requisições HTTP para HTTPS
 app.UseHttpsRedirection();
 
-// Middleware de autorização (pode ser configurado para proteger endpoints específicos)
+// Middleware de autorização (pode ser configurado  para proteger endpoints específicos)
 app.UseAuthorization();
 
 // Mapeia os controladores para os endpoints da API
