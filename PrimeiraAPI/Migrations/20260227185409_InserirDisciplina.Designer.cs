@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PrimeiraAPI.Data;
 
@@ -11,9 +12,11 @@ using PrimeiraAPI.Data;
 namespace PrimeiraAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260227185409_InserirDisciplina")]
+    partial class InserirDisciplina
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,10 +147,10 @@ namespace PrimeiraAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CursoId")
+                    b.Property<Guid>("CursoID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DisciplinaId")
+                    b.Property<Guid>("DisciplinaID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("NotaCurricular")
@@ -155,9 +158,9 @@ namespace PrimeiraAPI.Migrations
 
                     b.HasKey("DisciplinaCursoId");
 
-                    b.HasIndex("CursoId");
+                    b.HasIndex("CursoID");
 
-                    b.HasIndex("DisciplinaId");
+                    b.HasIndex("DisciplinaID");
 
                     b.ToTable("DisciplinasCursos");
                 });
@@ -205,21 +208,21 @@ namespace PrimeiraAPI.Migrations
 
             modelBuilder.Entity("PrimeiraAPI.Models.DisciplinaCurso", b =>
                 {
-                    b.HasOne("PrimeiraAPI.Models.Curso", "Cursos")
+                    b.HasOne("PrimeiraAPI.Models.Curso", "Curso")
                         .WithMany()
-                        .HasForeignKey("CursoId")
+                        .HasForeignKey("CursoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PrimeiraAPI.Models.Disciplina", "Disciplinas")
+                    b.HasOne("PrimeiraAPI.Models.Disciplina", "Disciplina")
                         .WithMany()
-                        .HasForeignKey("DisciplinaId")
+                        .HasForeignKey("DisciplinaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cursos");
+                    b.Navigation("Curso");
 
-                    b.Navigation("Disciplinas");
+                    b.Navigation("Disciplina");
                 });
 
             modelBuilder.Entity("PrimeiraAPI.Models.Curso", b =>
